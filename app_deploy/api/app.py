@@ -23,20 +23,22 @@ app = Flask(__name__)
 
 
 # On charge les données
-data=pd.read_csv("https://www.dropbox.com/scl/fi/e9fsy8ldmvxnhsvh13kr7/merged_data_feat_eng.csv?rlkey=85cddvaz2zizz497mtbl56u9j&dl=1")
-app_train_csv=pd.read_csv("https://www.dropbox.com/scl/fi/tanyjwas96srv4ymcs7vs/application_train.csv?rlkey=0rcplw3g21h238rj7bm82t1bk&dl=1")
-app_train=app_train_csv.copy()
-app_test_csv = pd.read_csv("https://www.dropbox.com/scl/fi/a43k3r3yppfzhv80lrl1s/application_test.csv?rlkey=x8sun1p22yop0qnsm7qe2knbz&dl=1")
-app_test=app_test_csv.copy()
+#data=pd.read_csv("https://www.dropbox.com/scl/fi/e9fsy8ldmvxnhsvh13kr7/merged_data_feat_eng.csv?#rlkey=85cddvaz2zizz497mtbl56u9j&dl=1")
+#app_train_csv=pd.read_csv("https://www.dropbox.com/scl/fi/tanyjwas96srv4ymcs7vs/application_train#.csv?rlkey=0rcplw3g21h238rj7bm82t1bk&dl=1")
+#app_train=app_train_csv.copy()
+#app_test_csv = #pd.read_csv("https://www.dropbox.com/scl/fi/a43k3r3yppfzhv80lrl1s/application_test.csv?#rlkey=x8sun1p22yop0qnsm7qe2knbz&dl=1")
+#app_test=app_test_csv.copy()
 
-data_train = data[data['SK_ID_CURR'].isin(app_train.SK_ID_CURR)]
-data_test = data[data['SK_ID_CURR'].isin(app_test.SK_ID_CURR)]
+#data_train = data[data['SK_ID_CURR'].isin(app_train.SK_ID_CURR)]
+#data_test = data[data['SK_ID_CURR'].isin(app_test.SK_ID_CURR)]
 
-data_test = data_test.drop('TARGET', axis=1)
+#data_test = data_test.drop('TARGET', axis=1)
 
 #data_train.set_index('SK_ID_CURR', inplace=True)
 #data_test.set_index('SK_ID_CURR', inplace=True)
 
+data_train=pd.read_csv("app_train.csv")
+data_test=pd.read_csv("app_test.csv")
 
 #Feature engineering fonction 
 
@@ -357,6 +359,6 @@ def load_voisins():
 
 
 if __name__ == '__main__':
-    app.run()
+   app.run(port=5000)
 
 
