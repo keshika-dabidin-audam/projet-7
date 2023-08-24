@@ -19,7 +19,7 @@ from flask import Flask
 # In[ ]:
 
 
-URL_API = "https://flask-heroku-api-7-81b34728df3d.herokuapp.com/"
+URL_API = "https://flask-api-oc-7-e12512d3591c.herokuapp.com/"
 
 
 # In[ ]:
@@ -150,7 +150,7 @@ def main():
         st.markdown("<i>Informations masquées</i>", unsafe_allow_html=True)
 
 
-@st.cache_data
+@st.cache_data()
 def init_api():
 
     # Requête permettant de récupérer la liste des ID clients
@@ -243,10 +243,12 @@ def load_prediction():
     
     # Requête permettant de récupérer la prédiction
     # de faillite du client sélectionné
+    #init_api()
     prediction = requests.get(URL_API + "predict", params={"id_client":id_client})
+    #prediction=int(prediction)
     prediction = prediction.json()
-
-    return prediction[1]
+    st.write("Request prediction done")
+    return prediction
 
 def load_voisins():
     

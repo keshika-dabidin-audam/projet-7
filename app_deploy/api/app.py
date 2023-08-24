@@ -3,6 +3,7 @@ from joblib import load
 from flask import Flask, jsonify, request, jsonify, render_template
 import json
 
+import pickle
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
@@ -139,10 +140,10 @@ def data_resampler(df_train, target):
 
 def entrainement_LightBoost(X, y):
 
-    # Configuration de la meilleure itération trouvée par le RandomizeSearchCV
-    # Optimized n_estimator=1144
+    # Configuration de la meilleure itération trouvée 
+    # Optimized n_estimator=600
     clf_lgbm = LGBMClassifier(colsample_bytree=0.600170715692459, 
-                              device='gpu',
+                              #device='gpu',
                               learning_rate=0.02975841167356727, 
                               max_depth=7, 
                               n_estimators=600,
@@ -152,6 +153,7 @@ def entrainement_LightBoost(X, y):
     clf_lgbm.fit(X, y)
 
     return clf_lgbm
+    
 
 
 
@@ -183,7 +185,7 @@ warnings.filterwarnings("ignore")
 @app.route("/init_model", methods=["GET"])
 def init_model():
     
-    # On prépare les données
+    ##On prépare les données
     df_train, df_test = features_engineering(data_train, data_test)
     df_train=df_train.drop(labels="Unnamed: 0",axis=1)
     df_test=df_test.drop(labels="Unnamed: 0",axis=1)
@@ -209,23 +211,25 @@ def init_model():
     # On entraîne le modèle et on le transforme en
     # variable globale pour la fonction predict
     
-    global clf_lgbm
-    clf_lgbm= entrainement_LightBoost(X, y)
+    #global clf_lgbm
+    #clf_lgbm= entrainement_LightBoost(X, y)
     print("Training LightBoost done")
 
-    global knn
-    knn = entrainement_knn(df_train)
+    #global knn
+    #knn = entrainement_knn(df_train)
     print("Training knn done")
     
     print(test)
     print(train)
 
-    return jsonify(["Initialisation terminée."])
+    return "Initialisation terminée."
+    
+
     
 # In[ ]:
-#@app.route("/")
-#def projet():
-	#return "<p> Route projet <\p>"
+@app.route("/")
+def projet():
+	return "Route projet "
 
 
 # Chargement des données pour la selection de l'ID client
@@ -311,28 +315,34 @@ def predict():
     
     id = request.args.get("id_client")
 
-    print("Analyse data_test :")
-    print(data_test.shape)
-    print(data_test[data_test["SK_ID_CURR"] == int(id)])
-     
-    index = data_test[data_test["SK_ID_CURR"] == int(id)].index.values
+    #print("Analyse data_test :")
+    #print(data_test.shape)
+    #print(data_test[data_test["SK_ID_CURR"] == int(id)])
+    data_test_pickle=pickle.load(open('data_test.pkl', 'rb'))
+    index = data_test_pickle[data_test_pickle["SK_ID_CURR"] == int(id)].index.values
 
-    print(index[0])
-    print(test)
+    #print(index[0])
+    #print(test)
     
    
-    data_client = test
+    data_client_pickle = pickle.load(open('data_client.pkl', 'rb'))
 
-    print(data_client)
+    print(data_client_pickle)
     
+    pickled_model = pickle.load(open('clf_lgbm.pkl', 'rb'))
+    prediction = pickled_model.predict_proba(data_client_pickle)
+    prediction1 = prediction[index].tolist()
 
-    prediction = clf_lgbm.predict_proba(data_client)
+    print(prediction1)
 
-    prediction = prediction[0].tolist()
+    #prediction = clf_lgbm.predict_proba(data_client)
 
-    print(prediction)
+    #prediction = prediction[0].tolist()
 
-    return jsonify(prediction)
+    #print(prediction)
+
+    #return jsonify(prediction)
+    return jsonify(prediction1[0][0])
 
 @app.route("/load_voisins", methods=["GET"])
 def load_voisins():
@@ -341,9 +351,11 @@ def load_voisins():
 
     index = data_test[data_test["SK_ID_CURR"] == int(id)].index.values
 
-    data_client = test
+    data_client_pickle = pickle.load(open('data_client.pkl', 'rb'))
+
+    pickled_knn=pickle.load(open('knn.pkl', 'rb'))
     
-    distances, indices = knn.kneighbors(data_client)
+    distances, indices = pickled_knn.kneighbors(data_client_pickle)
 
     print("indices")
     print(indices)
@@ -359,6 +371,6 @@ def load_voisins():
 
 
 if __name__ == '__main__':
-   app.run(port=5000)
+   app.run()
 
 
