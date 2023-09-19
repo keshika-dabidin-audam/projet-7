@@ -29,6 +29,10 @@ Le déploiement s'est effectué via Heroku.
 3. requirements.txt
 
 ## Livrables 
-- 
+- Dossier Notebook Files : contient les notebooks d'analyse exploratoire (EDA), de modélisation , d'étude du data drift
+- Dossier app_deploy : contient les fichiers nécessaires au déploiement sur le cloud de l'API (via Flask) et de l'application du dashboard (via streamlit)
+- Dossier app_local : contient les fichiers nécessaires au déploiment de l'API et du dashboard en local
+- Note méthodologique expliquant le processus et les résultats obtenus : Dabidin_Keshika_3_Note_méthodologique_082023.pdf
+- Un support de présentation : Dabidin_Keshika_4_presentation_082023.pdf
 
 
