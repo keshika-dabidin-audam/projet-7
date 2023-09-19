@@ -25,6 +25,10 @@ Le déploiement s'est effectué via Heroku.
 
 
 
+https://github.com/keshika-dabidin-audam/projet-7/assets/137776074/ee781560-93f8-41c7-a30e-102dd13c653e
+
+
+
 ## Les fichiers requis pour le déploiement de l'application sont les suivants : 
 1. setup.sh
 2. Procfile
