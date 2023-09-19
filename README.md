@@ -23,6 +23,8 @@ Pour ce projet, les données ont été manipulées en Python sur support Jupyter
 
 Le déploiement s'est effectué via Heroku. 
 
+
+
 ## Les fichiers requis pour le déploiement de l'application sont les suivants : 
 1. setup.sh
 2. Procfile
